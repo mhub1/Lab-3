@@ -212,6 +212,24 @@ public class Hand {
 		return isHandStraightFlush;
 
 	}
+	
+	public static boolean isHandFiveOfAKind(Hand h, HandScore hs) {
+
+		boolean isHandFiveOfAKind = false;
+		if((isHandFourOfAKind(h, hs) && numJokers(h) == 1) || (isHandThreeOfAKind(h, hs) && numJokers(h) == 2))
+			isHandFiveOfAKind = true;
+		else
+			isHandFiveOfAKind = false;
+		return isHandFiveOfAKind;
+	}
+	
+	public static int numJokers(Hand h){
+		int numJokers = 0;
+		for (int i = 0; i < h.getCardsInHand().size()-1;i++)
+			if(h.getCardsInHand().get(i).geteRank() == eRank.JOKER)
+				numJokers++;
+		return numJokers;
+	}
 
 	// TODO: Implement This Method
 	public static boolean isHandFourOfAKind(Hand h, HandScore hs) {
