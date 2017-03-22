@@ -25,6 +25,17 @@ public class Deck {
 		}
 		Collections.shuffle(DeckCards);
 	}
+	
+	public Deck(int numJokers){
+		this();
+		int iCardNbr = DeckCards.size();
+		for(int i = 0; i < numJokers; i++){
+			Card newJoker = new Card(eRank.JOKER, eSuit.JOKER, ++iCardNbr);
+			newJoker.setWild(true);
+			DeckCards.add(newJoker);
+		}
+			Collections.shuffle(DeckCards);
+	}
 
 	public Card DrawCard() {
 
