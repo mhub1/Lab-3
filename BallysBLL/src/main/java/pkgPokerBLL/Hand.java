@@ -64,9 +64,55 @@ public class Hand {
 	//		One Wild/joker 'ReturnHands' should have 52 hands, etc
 	
 	public static ArrayList<Hand> ExplodeHands(Hand h) {
-
+		//Create a priority stack.
 		ArrayList<Hand> ReturnHands = new ArrayList<Hand>();
+		if(numWild(h) == 0 || numWild(h) == 5)
+			ReturnHands.add(h);
+		else
+			for(int i = 0; i > numWild(h); i++){
+				handleWilds(startWild(h), numWild(h), numWild(h));
+				//change number 0 loop, then change number 1
+			//ReturnHands.add(newHand);
+			}
 		return ReturnHands;
+	}
+	
+	public static Hand startWild(Hand h){
+		Hand newHand = new Hand();
+		for(Card wild : h.CardsInHand)
+			if(wild.isWild())
+				newHand.AddCardToHand(wild);
+		for(Card notWild : h.CardsInHand)
+			if(!notWild.isWild())
+				newHand.AddCardToHand(notWild);
+		return newHand;
+	}
+	
+	public static ArrayList<Hand> handleWilds(Hand h, int numWilds, int index){
+		ArrayList<Hand> newList = new ArrayList<Hand>();
+		//go to last change value
+			//to next -> go to last change value
+				//to next -> go to last change value
+		if(index < numWilds){
+			for(eSuit sut : eSuit.values()){
+				h.getCardsInHand().get(index).seteSuit(sut);
+				for(eRank rnk : eRank.values()){
+					h.getCardsInHand().get(index).seteRank(rnk);
+					handleWilds(h, numWilds, index++);
+				}
+			}
+		}
+		else
+			for(eSuit sut : eSuit.values()){
+				h.getCardsInHand().get(index).seteSuit(sut);
+				for(eRank rnk : eRank.values()){
+					Hand newHand = h;
+					h.getCardsInHand().get(index).seteRank(rnk);
+					newList.add(newHand);
+				}
+			}
+				
+		return newList;
 	}
 
 	private static Hand EvaluateHand(Hand h) {
@@ -216,19 +262,19 @@ public class Hand {
 	public static boolean isHandFiveOfAKind(Hand h, HandScore hs) {
 
 		boolean isHandFiveOfAKind = false;
-		if((isHandFourOfAKind(h, hs) && numJokers(h) == 1) || (isHandThreeOfAKind(h, hs) && numJokers(h) == 2))
+		if((isHandFourOfAKind(h, hs) && numWild(h) == 1) || (isHandThreeOfAKind(h, hs) && numWild(h) == 2))
 			isHandFiveOfAKind = true;
 		else
 			isHandFiveOfAKind = false;
 		return isHandFiveOfAKind;
 	}
 	
-	public static int numJokers(Hand h){
-		int numJokers = 0;
+	public static int numWild(Hand h){
+		int numWild = 0;
 		for (int i = 0; i < h.getCardsInHand().size()-1;i++)
-			if(h.getCardsInHand().get(i).geteRank() == eRank.JOKER)
-				numJokers++;
-		return numJokers;
+			if(h.getCardsInHand().get(i).isWild())
+				numWild++;
+		return numWild;
 	}
 
 	// TODO: Implement This Method
