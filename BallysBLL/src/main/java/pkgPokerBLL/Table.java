@@ -1,14 +1,13 @@
 package pkgPokerBLL;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
 
 public class Table {
 
 	private UUID TableID;
 	
-	//	Change this from ArrayList to HashMap.
-	private ArrayList<Player> TablePlayers = new ArrayList<Player>();
+	private HashMap<Player, UUID> TablePlayers = new HashMap<Player, UUID>();
 	
 	public Table() {
 		super();
@@ -17,13 +16,13 @@ public class Table {
 	
 	public Table AddPlayerToTable(Player p)
 	{
-		//TODO: Add a player to the table (should be pretty easy)		
+		TablePlayers.put(p, UUID.randomUUID());
 		return this;
 	}
 	
 	public Table RemovePlayerFromTable(Player p)
 	{
-		//TODO: Remove a player from the table
+		TablePlayers.remove(p);
 		return this;
 	}
 }

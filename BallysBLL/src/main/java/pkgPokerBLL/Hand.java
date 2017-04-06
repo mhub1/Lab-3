@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.UUID;
 
+import pkgExceptions.HandException;
 import pkgPokerEnum.eCardNo;
 import pkgPokerEnum.eHandStrength;
 import pkgPokerEnum.eRank;
@@ -18,7 +19,7 @@ public class Hand {
 	private UUID HandID;
 	private boolean bIsScored;
 	private HandScore HS;
-	private ArrayList<Card> CardsInHand = new ArrayList<Card>();
+	private static ArrayList<Card> CardsInHand = new ArrayList<Card>();
 
 	public Hand() {
 
@@ -114,7 +115,14 @@ public class Hand {
 		}
 		return h;
 	}
+	public static Hand PickBestHand(ArrayList<Hand> Hands) throws HandException {
+		Collections.sort(Hands, Hand.HandRank);
+		if (Hands.get(0).HandRank == Hands.get(1).HandRank) {
+			throw new HandException(CardsInHand);
+		}
+		return Hands.get(0);
 
+	}
 	public static boolean isStraight(ArrayList<Card> cards, Card c) {
 		boolean isStraight = false;
 		int iStartCard = (Hand.isAce(cards)) ? eCardNo.SecondCard.getCardNo() : eCardNo.FirstCard.getCardNo();
@@ -214,6 +222,24 @@ public class Hand {
 	}
 
 	// TODO: Implement This Method
+	public static boolean isHandFiveOfAKind(Hand h, HandScore hs) {
+
+		boolean isHandFiveOfAKind = false;
+
+		ArrayList<Card> kickers = new ArrayList<Card>();
+		if (h.getCardsInHand().get(eCardNo.FirstCard.getCardNo()).geteRank() == h.getCardsInHand()
+				.get(eCardNo.FifthCard.getCardNo()).geteRank()) {
+			isHandFiveOfAKind = true;
+			hs.setHiHand(h.getCardsInHand().get(eCardNo.FirstCard.getCardNo()).geteRank());
+		}
+
+		if (isHandFiveOfAKind) {
+			hs.setHandStrength(eHandStrength.FiveOfAKind);
+			hs.setLoHand(null);
+		}
+
+		return isHandFiveOfAKind;
+	}
 	public static boolean isHandFourOfAKind(Hand h, HandScore hs) {
 
 		boolean isHandFourOfAKind = false;
